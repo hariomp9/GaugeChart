@@ -3,7 +3,7 @@ import GaugeChart from "./guageChart";
 
 const App = () => {
   return (
-    <div style={{}}>
+    <div>
       <GaugeChart />
     </div>
   );

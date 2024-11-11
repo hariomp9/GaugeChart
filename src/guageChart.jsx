@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
-import { setChartValue } from "./redux/guageSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { setGaugeValue } from "./redux/guageSlice"; // Assuming setGaugeValue is an action creator
+import "./index.css";
 
-const CustomGaugeChart = ({ value }) => {
+const CustomGaugeChart = () => {
+  const chartValue = useSelector((state) => state.gauge.chartValue);
+
   const data = [
     {
       name: "Filled",
-      value: value,
+      value: chartValue,
       fill: "url(#purpleGradient)", // Reference the purple gradient fill
     },
   ];
-  // Calculate the end angle based on value
-  const calculatedEndAngle = 180 - (value / 100) * 180;
+
+  // Calculate the end angle based on value (180 degrees = 100%)
+  const calculatedEndAngle = 180 - (chartValue / 100) * 180;
+
+  // Calculate the angle for the needle (pointer) rotation based on the value
+  const pointerAngle = (chartValue / 100) * 180;
+
   return (
     <div
       style={{
@@ -35,20 +43,30 @@ const CustomGaugeChart = ({ value }) => {
           <defs>
             <linearGradient id="purpleGradient" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stopColor="#a183d9" />
-              <stop offset="50%" stopColor="#6939A5" />{" "}
-              {/* Main color #6939A5 */}
-              <stop offset="100%" stopColor="#4b2e7d" />{" "}
-              {/* Darker Shade of #6939A5 */}
+              <stop offset="50%" stopColor="#6939A5" />
+              <stop offset="100%" stopColor="#4b2e7d" />
             </linearGradient>
           </defs>
-          <RadialBar
-            minAngle={15}
-            clockWise
-            dataKey="value"
-            cornerRadius={0} // Makes the ends rounded
-          />
+
+          <RadialBar minAngle={15} clockWise dataKey="value" cornerRadius={0} />
         </RadialBarChart>
       </ResponsiveContainer>
+
+      {/* Needle/pointer */}
+      <div
+        style={{
+          position: "absolute",
+          top: "55%",
+          left: "50%",
+          width: "2px",
+          height: "21%",
+          backgroundColor: "#FF6347", // Red color for the pointer
+          transformOrigin: "bottom center",
+          transform: `rotate(${pointerAngle - 90}deg)`, // Offset by 90 to start from 0%
+          transition: "transform 1.5s ease-out", // Smooth transition
+        }}
+      ></div>
+
       {/* Display the range labels below the gauge */}
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div
@@ -61,7 +79,7 @@ const CustomGaugeChart = ({ value }) => {
           }}
         >
           <span>0%</span>
-          <span>{value}%</span>
+          <span>{chartValue}%</span>
           <span>100%</span>
         </div>
       </div>
@@ -69,10 +87,12 @@ const CustomGaugeChart = ({ value }) => {
     </div>
   );
 };
+
 const Apps = () => {
   const dispatch = useDispatch();
   const chartValue = useSelector((state) => state.gauge.chartValue);
   const [lastNumber, setLastNumber] = useState(null);
+
   const handleClick = () => {
     const numbers = [25, 50, 75, 100];
     const availableNumbers = lastNumber
@@ -81,9 +101,14 @@ const Apps = () => {
     const randomNumber =
       availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
 
-    dispatch(setChartValue(randomNumber));
+    dispatch(setGaugeValue(randomNumber)); // Dispatch the value to the Redux store
     setLastNumber(randomNumber);
   };
+
+  // Add useEffect to reset the needle to 0 on page load
+  useEffect(() => {
+    dispatch(setGaugeValue(chartValue)); // Reset the value to 0 on page load or refresh
+  }, [dispatch]);
 
   return (
     <div style={{ textAlign: "center" }}>
