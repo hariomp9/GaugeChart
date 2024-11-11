@@ -1,9 +1,11 @@
-import React from 'react'
-
+import React from "react";
+import GaugeChart from "./guageChart";
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <div>
+      <GaugeChart />
+    </div>
+  );
+};
 
-export default App
+export default App;
