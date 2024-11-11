@@ -1,8 +1,9 @@
 import React from "react";
 import GaugeChart from "./guageChart";
+
 const App = () => {
   return (
-    <div>
+    <div style={{}}>
       <GaugeChart />
     </div>
   );

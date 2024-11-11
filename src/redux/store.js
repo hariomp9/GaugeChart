@@ -1,14 +1,3 @@
-// import { configureStore } from '@reduxjs/toolkit';
-// import gaugeReducer from './guageSlice';
-
-// export const store = configureStore({
-//   reducer: {
-//   },
-// });
-
-// export default store;
-
-
 
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
@@ -19,7 +8,7 @@ import gaugeReducer from "./guageSlice"
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["Gauge"], // Add the slices you want to persist here
+  whitelist: ["gauge"], // Add the slices you want to persist here
 };
 
 const rootReducer = combineReducers({

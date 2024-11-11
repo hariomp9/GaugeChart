@@ -16,7 +16,6 @@ const CustomGaugeChart = ({ value }) => {
   return (
     <div
       style={{
-        backgroundColor: "#000",
         padding: "20px",
         position: "relative",
         textAlign: "center",
@@ -90,8 +89,18 @@ const Apps = () => {
     <div style={{ textAlign: "center" }}>
       <CustomGaugeChart value={chartValue} />
       <div style={{ marginTop: "20px" }}>
-        <button style={{ cursor: "pointer" }} onClick={handleClick}>
-          Submit
+        <button
+          style={{
+            cursor: "pointer",
+            border: "1px solid #fff",
+            borderRadius: "5px",
+            color: "#fff",
+            backgroundColor: "#000",
+            padding: "10px",
+          }}
+          onClick={handleClick}
+        >
+          Generate Random Number
         </button>
       </div>
     </div>
