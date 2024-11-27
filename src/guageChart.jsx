@@ -6,7 +6,6 @@ import "./index.css";
 
 const CustomGaugeChart = () => {
   const chartValue = useSelector((state) => state.gauge.chartValue);
-
   const data = [
     {
       name: "Filled",
@@ -20,7 +19,6 @@ const CustomGaugeChart = () => {
 
   // Calculate the angle for the needle (pointer) rotation based on the value
   const pointerAngle = (chartValue / 100) * 180;
-
   return (
     <div
       style={{
@@ -65,7 +63,18 @@ const CustomGaugeChart = () => {
           transform: `rotate(${pointerAngle - 90}deg)`, // Offset by 90 to start from 0%
           transition: "transform 1.5s ease-out", // Smooth transition
         }}
-      ></div>
+      >
+        <span
+          style={{
+            position: "absolute",
+            color: "#fff",
+            bottom: "130px",
+            right: "5px",
+          }}
+        >
+          {chartValue}%
+        </span>
+      </div>
 
       {/* Display the range labels below the gauge */}
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -78,7 +87,7 @@ const CustomGaugeChart = () => {
             marginTop: "5px",
           }}
         >
-          <span>0%</span>
+          <span style={{marginLeft:"8px"}}>0%</span>
           <span>{chartValue}%</span>
           <span>100%</span>
         </div>
@@ -104,7 +113,6 @@ const Apps = () => {
     dispatch(setGaugeValue(randomNumber)); // Dispatch the value to the Redux store
     setLastNumber(randomNumber);
   };
-
   // Add useEffect to reset the needle to 0 on page load
   useEffect(() => {
     dispatch(setGaugeValue(chartValue)); // Reset the value to 0 on page load or refresh
@@ -124,7 +132,7 @@ const Apps = () => {
             padding: "10px",
           }}
           onClick={handleClick}
-        >
+        > 
           Generate Random Number
         </button>
       </div>
